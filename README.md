@@ -22,8 +22,8 @@ Tested on Windows 11.
 **Windows (PowerShell)**
 
 ```powershell
-git clone https://github.com/Chandukasireddy/microduck-simulation.git
-cd microduck-simulation
+git clone https://github.com/SrihithaJindam/micro-duck_simulation.git
+cd micro-duck_simulation
 py -3.12 -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
@@ -33,8 +33,8 @@ python download_assets.py
 **macOS / Linux**
 
 ```bash
-git clone https://github.com/Chandukasireddy/microduck-simulation.git
-cd microduck-simulation
+git clone https://github.com/SrihithaJindam/micro-duck_simulation.git
+cd micro-duck_simulation
 python3.12 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
@@ -49,7 +49,7 @@ python demo_microduck_walk.py
 
 On macOS use `mjpython` instead of `python`. Close the window to stop.
 
-Next time: `cd microduck-simulation`, activate (`.venv\Scripts\activate` or `source .venv/bin/activate`), then run.
+Next time: `cd micro-duck_simulation`, activate (`.venv\Scripts\activate` or `source .venv/bin/activate`), then run.
 
 ## Controls
 
@@ -64,6 +64,34 @@ python demo_dancing_dog.py  # a Unitree Go2 robot dog dances
 python demo_balance.py      # an AI learns to balance a pole (~1 min)
 python demo_arm_pick.py     # a robot arm picks up a cube
 python demo_microduck.py    # the duck turns its head
+```
+
+## Extra simulations
+
+Activate the `.venv` first (the first two use the same environment as the duck).
+
+**Drive the duck over an obstacle course** (MuJoCo)
+
+```bash
+python demo_microduck_drive.py             # keyboard: arrows to walk and turn, S stop, P shove, 1/2/3 sit/stand/roll
+python demo_microduck_drive.py --pushtest  # no window: shoves the walking duck and counts falls
+```
+
+**Maze robot** (MuJoCo): a wheeled robot with five distance sensors solves a random 3D maze by itself using the right-hand rule. Press `N` for a new maze, `R` to restart.
+
+```bash
+python demo_maze_robot.py
+python demo_maze_robot.py --selftest       # no window: solves several mazes and prints the times
+```
+
+**Hill-climb rover** (Pymunk + pygame, 2D): drive a two-wheeled car over hills with Right/Left arrows (or D/A), `R` to reset. It has its own small environment because it does not use MuJoCo.
+
+```bash
+cd pymunk_rover
+py -3.12 -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+python demo_rover.py
 ```
 
 ## Troubleshooting
