@@ -16,7 +16,7 @@ ASSETS = Path(__file__).parent / "assets"
 MICRODUCK_REPO = "https://github.com/pollen-robotics/microduck_rl.git"
 MICRODUCK_COMMIT = "bae39f5900b318f7e87fc485c30a31213cfa14eb"
 
-# Google DeepMind's robot model collection (only the Franka Panda arm is downloaded)
+# Google DeepMind's robot model collection (only the Franka Panda arm and Unitree Go2 dog are downloaded)
 MENAGERIE_REPO = "https://github.com/google-deepmind/mujoco_menagerie.git"
 MENAGERIE_COMMIT = "b0655057a9df2abe39ea7fc989914ba6f248301c"
 
@@ -29,22 +29,32 @@ def git(*args: str) -> None:
     subprocess.run(["git", *args], check=True)
 
 
-def clone(repo: str, commit: str, target: Path, only_folder: str | None = None) -> None:
+def clone(repo: str, commit: str, target: Path, only_folders: list[str] | None = None) -> None:
     if target.exists():
-        print(f"{target.name}: already downloaded")
+        missing = [f for f in only_folders or [] if not (target / f).exists()]
+        if missing:
+            print(f"Adding {', '.join(missing)} to {target.name}...")
+            git("-C", str(target), "sparse-checkout", "add", *missing)
+        else:
+            print(f"{target.name}: already downloaded")
         return
     print(f"Downloading {target.name}...")
-    extra = ["--sparse"] if only_folder else []
+    extra = ["--sparse"] if only_folders else []
     git("clone", "--filter=blob:none", "--no-checkout", *extra, repo, str(target))
-    if only_folder:
-        git("-C", str(target), "sparse-checkout", "set", only_folder)
+    if only_folders:
+        git("-C", str(target), "sparse-checkout", "set", *only_folders)
     git("-C", str(target), "-c", "advice.detachedHead=false", "checkout", commit)
 
 
 def main() -> None:
     ASSETS.mkdir(exist_ok=True)
     clone(MICRODUCK_REPO, MICRODUCK_COMMIT, ASSETS / "microduck_rl")
-    clone(MENAGERIE_REPO, MENAGERIE_COMMIT, ASSETS / "mujoco_menagerie", only_folder="franka_emika_panda")
+    clone(
+        MENAGERIE_REPO,
+        MENAGERIE_COMMIT,
+        ASSETS / "mujoco_menagerie",
+        only_folders=["franka_emika_panda", "unitree_go2"],
+    )
 
     policies = ASSETS / "policies"
     policies.mkdir(exist_ok=True)

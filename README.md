@@ -60,6 +60,7 @@ Next time: `cd microduck-simulation`, activate (`.venv\Scripts\activate` or `sou
 ## More demos
 
 ```bash
+python demo_dancing_dog.py  # a Unitree Go2 robot dog dances
 python demo_balance.py      # an AI learns to balance a pole (~1 min)
 python demo_arm_pick.py     # a robot arm picks up a cube
 python demo_microduck.py    # the duck turns its head
@@ -76,4 +77,4 @@ python demo_microduck.py    # the duck turns its head
 - MicroDuck robot, code, and policies: [Pollen Robotics](https://github.com/pollen-robotics/microduck_rl) (Apache 2.0; the 3D meshes are CC BY-NC-SA, non-commercial only)
 - Physics: [MuJoCo](https://github.com/google-deepmind/mujoco), Google DeepMind
 - Motor model: [BAM](https://github.com/Rhoban/bam), Rhoban
-- Robot arm: [MuJoCo Menagerie](https://github.com/google-deepmind/mujoco_menagerie)
+- Robot arm and dog: [MuJoCo Menagerie](https://github.com/google-deepmind/mujoco_menagerie) (Franka Panda, Unitree Go2)
