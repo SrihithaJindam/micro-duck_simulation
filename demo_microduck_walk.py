@@ -73,8 +73,11 @@ def quat_rotate_inverse(quat, vec):
     return vec - w * t + np.cross(xyz, t)
 
 
-def build_model_and_motors():
-    """Load the robot with the BAM motor model on each joint. Mirrors infer_policy.py."""
+def build_model_and_motors(edit_spec=None):
+    """Load the robot with the BAM motor model on each joint. Mirrors infer_policy.py.
+
+    edit_spec, if given, is called with the MjSpec before compiling (to add obstacles etc.).
+    """
     bam_model = load_model(motor_name="xl330", model="m6")
     bam_model.actuator.kp = KP_FIRMWARE
     bam_model.actuator.vin = BATTERY_VOLTS
@@ -105,6 +108,8 @@ def build_model_and_motors():
                 joint.solimp_friction = STIFF_SOLIMP_FRICTION
                 break
 
+    if edit_spec is not None:
+        edit_spec(spec)
     model = spec.compile()
     model.opt.timestep = TIMESTEP
     data = mujoco.MjData(model)
